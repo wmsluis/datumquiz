@@ -8,13 +8,14 @@ class DatumQuiz(object):
     """toon een datum en laat de gebruiker de dag van de week berekenen"""
 
     def __init__(self, startyear, yearcnt):
-        self.weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        self.weekdays = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za']
         self.date1 = datetime.date(startyear, 1, 1)
         date2 = datetime.date(startyear + yearcnt - 1, 12, 31)
         self.daycnt = (date2 - self.date1).days
         self.vraag_cnt = 0
         self.correct_cnt = 0
         self.starttijd = datetime.datetime.now()
+        locale.setlocale(locale.LC_ALL, 'nl_NL.utf8')
         
     def play(self):
         # een finite-state machine 
@@ -34,7 +35,7 @@ class DatumQuiz(object):
         return "get_antwoord"
     
     def get_antwoord(self):
-        invoer = input("(Zon=0, Maa=1 ... Zat=6 of druk op x om te stoppen): ")
+        invoer = input("(zo=0, ma=1, di=2, wo=3, do=4, vr=5, za=6 of druk op x om te stoppen): ")
         if not invoer:
             return "get_antwoord"
 

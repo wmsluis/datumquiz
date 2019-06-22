@@ -6,7 +6,7 @@
 # quiz waarbij vragen bestaan uit het raden van de weekdag 
 # van een random gegenereerde datum
 
-# en hier een ander commentaar ...
+# een overbodig commentaar toegevoegd
 
 import datetime
 import argparse
@@ -26,3 +26,4 @@ args = parser.parse_args()
 
 quiz = datumquiz.DatumQuiz(args.year, args.count)
 quiz.play()
+

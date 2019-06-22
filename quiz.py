@@ -6,6 +6,8 @@
 # quiz waarbij vragen bestaan uit het raden van de weekdag 
 # van een random gegenereerde datum
 
+# en hier een ander commentaar ...
+
 import datetime
 import argparse
 import datumquiz

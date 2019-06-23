@@ -7,7 +7,7 @@ class DatumQuiz(object):
     """toon een datum en laat de gebruiker de dag van de week berekenen"""
 
     def __init__(self, startyear, yearcnt):
-        self.weekdays = ['Zon', 'Maa', 'Din', 'Woe', 'Don', 'Vri', 'Zat']
+        self.weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
         self.date1 = datetime.date(startyear, 1, 1)
         date2 = datetime.date(startyear + yearcnt - 1, 12, 31)
         self.daycnt = (date2 - self.date1).days

@@ -9,9 +9,9 @@ class DatumQuiz(object):
 
     def __init__(self, startyear, yearcnt):
         self.weekdays = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za']
-        self.date1 = datetime.date(startyear, 1, 1)
-        date2 = datetime.date(startyear + yearcnt - 1, 12, 31)
-        self.daycnt = (date2 - self.date1).days
+        self.dateStart = datetime.date(startyear, 1, 1)
+        dateEnd = datetime.date(startyear + yearcnt, 1, 1)
+        self.daycnt = (dateEnd - self.dateStart).days
         self.vraag_cnt = 0
         self.correct_cnt = 0
         self.starttijd = datetime.datetime.now()
@@ -28,7 +28,7 @@ class DatumQuiz(object):
             
     def stel_vraag(self):
         d = random.randint(0, self.daycnt)
-        datum = self.date1 + datetime.timedelta(days=d)
+        datum = self.dateStart + datetime.timedelta(days=d)
         self.correct_antwoord = datum.strftime("%a")
         print("Op welke dag valt %s?" % datum.strftime("%d %b %Y"))
         self.vraag_cnt += 1

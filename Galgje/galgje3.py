@@ -1,97 +1,78 @@
 import re
 import random
 
-
 class Galgje(object):
-    """ spelletje galgje """
+    """ Eén spelletje galgje """
 
-    def __init__(self, woordenlijst):
-        self.woordenlijst = []
-        self.het_woord = random.choice(woordenlijst)
-        self.aantal_gokken = 10
-        self.invul = str("_ " * len(self.het_woord))
-        self.geprobeerd = []
-
-
+    def __init__(self, woordenlijst, maxgok):
+        self.het_woord = random.choice(woordenlijst).upper()
+        self.invul = ['_'] * len(self.het_woord)    # array met gedeeltelijk ingevulde antwoord
+        self.max_gokken = maxgok
+        self.pogingen = 0                           # aantal mislukte gokbeurten
+        self.geprobeerd = []                        # gegokte letters
+ 
     def speel(self):
-        toestand = "nieuw_woord"
+        toestand = "ophalen_gok"
         while toestand != "exit":
             actie = getattr(self, toestand)
             toestand = actie()
 
-    def nieuw_woord(self):
-        print(f'De lengte van het woord is {len(self.het_woord)} letters')
-        return "start"
+    def ophalen_gok(self):
+        print(f'\nGalgje woord: {self.toon_woord()}')
+        print(f'de volgende letters heb je reeds geprobeerd: {self.geprobeerd}')
+        print(f'je mag nog {self.max_gokken - self.pogingen} keer raden')
+        self.gok = input("Raad een letter of probeer het woord te raden (of punt(.) of te stoppen: ").upper()
+        return "verwerk_gok"
 
+    def verwerk_gok(self):
+        if self.gok == ".":
+            return "exit"
 
-    def start(self):
+        if len(self.gok) != 1 or not self.gok.isalpha():
+            print("incorrect invoer, vul één letter in.")
+            return "ophalen_gok"
+
+        if self.gok in self.geprobeerd:
+            print("deze letter is al gebruikt, probeer opnieuw")
+            return "ophalen_gok" 
+
+        self.geprobeerd.append(self.gok)
+
+        if not self.gok in self.het_woord:
+            return "foute_gok" 
+    
+        return "goede_gok" 
+
+    def foute_gok(self):
+        print(f'\nhelaas, de letter {self.gok} komt niet voor in het woord')
+        self.pogingen += 1
+        return "toon_voortgang"
+
+    def goede_gok(self):
+        print(f'de letter {self.gok} komt voor in het woord')
+        for index, letter in enumerate(self.het_woord):
+            if letter == self.gok:
+                self.invul[index] = self.gok
+        return "toon_voortgang"
+
+    def toon_voortgang(self):
+        if self.pogingen >= self.max_gokken:
+            return "te_veel_pogingen"
+
         if '_' not in self.invul:
             return "woord_geraden"
 
-        if self.aantal_gokken > 0:
-            print(f'\nGalgje woord: {self.invul}')
-            print(f'de volgende letter heb je reeds geprobeerd: {self.geprobeerd}')
-            print(f'Je mag nog {self.aantal_gokken} keer raden')
-            return "antwoord"
+        return "ophalen_gok"
 
-        else:
-            print(f'Jammer joh! Dat was kennelijk te moeilijk :-p  Het woord was: {self.het_woord} ')
-            input("druk op een toests om af te sluiten")
-            return "exit"
-
-
-    def antwoord(self):
-        self.gok = input("raad een letter of probeer het woord te raden: ")
-
-        if len(self.gok) == 1:
-            return "check_letter"
-
-        elif len(self.gok) == len(self.het_woord):
-            return "check_woord"
-
-        else:
-            print("incorrect aantal letters. Vul één letter in of raad het hele woord ")
-            return "start"
-
-
-    def check_letter(self):
-        self.geprobeerd.append(self.gok)
-
-        if self.gok in self.het_woord:
-            return "letter_correct"
-
-        else:
-            return "letter_incorrect"
-
-
-    def letter_correct(self):
-        print(f'de letter {self.gok} komt voor in het woord')
-        for gevonden in re.finditer(self.gok, self.het_woord):
-            positie = int(gevonden.start())
-            self.invul = self.invul[:positie * 2] + self.gok + self.invul[2 * positie + 1:]
-        return "start"
-
-
-    def letter_incorrect(self):
-        print(f'\nhelaas, de letter {self.gok} komt niet voor in het woord')
-        self.aantal_gokken -= 1
-        return "start"
-
-
-    def check_woord(self):
-        if self.gok == self.het_woord:
-            return "woord_geraden"
-        else:
-            return "woord_incorrect"
-
+    def te_veel_pogingen(self):
+        print(f'Jammer joh! Dat was kennelijk te moeilijk :-p  Het woord was: {self.het_woord} ')
+        return "exit"
 
     def woord_geraden(self):
         print(f"\nGefeliciteerd, je hebt het geraden!!! Het woord was '{self.het_woord}'")
-        input("druk op een toests om af te sluiten")
         return "exit"
+ 
+    def toon_woord(self):
+        "hulpfunctie, geen toestand" 
+        return " ".join(self.invul)
 
-
-    def woord_incorrect(self):
-        print(f'\nHelaas, pindakaas! {self.gok} is niet correct')
-        self.aantal_gokken -= 1
-        return "start"

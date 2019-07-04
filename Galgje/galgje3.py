@@ -2,16 +2,18 @@ import re
 import random
 
 class Galgje(object):
-    """ Eén spelletje galgje """
+    """ Een spelletje galgje """
 
-    def __init__(self, woordenlijst, maxgok):
-        self.het_woord = random.choice(woordenlijst).upper()
-        self.invul = ['_'] * len(self.het_woord)    # array met gedeeltelijk ingevulde antwoord
-        self.max_gokken = maxgok
+    def __init__(self, woordenlijst):
+        self.woordenlijst = woordenlijst
         self.pogingen = 0                           # aantal mislukte gokbeurten
         self.geprobeerd = []                        # gegokte letters
  
-    def speel(self):
+    def speel(self, maxgok):
+        self.max_gokken = maxgok
+        self.het_woord = random.choice(self.woordenlijst).upper()
+        self.invul = ['_'] * len(self.het_woord)    # array met gedeeltelijk ingevulde antwoord
+        
         toestand = "ophalen_gok"
         while toestand != "exit":
             actie = getattr(self, toestand)

@@ -4,7 +4,7 @@ import re
 with open('galgje_woorden.txt', mode='r', encoding='utf8') as f:
     tekst = f.read()
 
-woorden = re.findall('\\b[a-zA-Z]+\\b', tekst)
+woorden = re.findall('\\b[a-z]+\\b', tekst)
 woordenlijst = []
 
 for woord in woorden:
@@ -14,7 +14,7 @@ for woord in woorden:
     if woord not in woordenlijst:
         woordenlijst.append(woord)
  
-galgje = galgje3.Galgje(woordenlijst, 5)
-galgje.speel()
+galgje = galgje3.Galgje(woordenlijst)
+galgje.speel(5)
 
  

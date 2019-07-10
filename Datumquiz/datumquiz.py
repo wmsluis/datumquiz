@@ -2,20 +2,20 @@ import time
 import datetime
 import random
 import sys
-import locale
+import calendar
 
 class DatumQuiz(object):
     """toon een datum en laat de gebruiker de dag van de week berekenen"""
 
     def __init__(self, startyear, yearcnt):
-        self.weekdays = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za']
+        self.weekdays = [x for x in calendar.day_abbr]
+        self.weekdays.insert(0, self.weekdays.pop(6))
         self.dateStart = datetime.date(startyear, 1, 1)
         dateEnd = datetime.date(startyear + yearcnt, 1, 1)
         self.daycnt = (dateEnd - self.dateStart).days
         self.vraag_cnt = 0
         self.correct_cnt = 0
         self.starttijd = datetime.datetime.now()
-        locale.setlocale(locale.LC_ALL, 'nl_NL.utf8')
         
     def play(self):
         # een finite-state machine 

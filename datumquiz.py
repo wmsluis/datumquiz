@@ -22,21 +22,23 @@ class DatumQuiz(object):
         # een finite-state machine 
         # de toestand is een string waar ook een methode voor bestaat
         # iedere methode geeft een string terug met de naam van de volgende toestand
-        toestand = "stel_vraag"
+        wdays = ", ".join(self.weekdays)
+        print("Kies bij iedere vraag voor een weekdag: {}".format(wdays))
+        print("of druk op x om te stoppen of op h voor een hint")
+        toestand = "kies_datum"
         while toestand != "afsluiten":
             actie = getattr(self, toestand)
             toestand = actie()
             
-    def stel_vraag(self):
+    def kies_datum(self):
         d = random.randint(0, self.daycnt)
-        datum = self.dateStart + datetime.timedelta(days=d)
-        self.correct_antwoord = self.weekdays[int(datum.strftime("%w"))]
-        print("Op welke dag valt %s?" % datum.strftime("%d %b %Y"))
+        self.datum = self.dateStart + datetime.timedelta(days=d)
+        self.correct_antwoord = self.weekdays[int(self.datum.strftime("%w"))]
         self.vraag_cnt += 1
         return "get_antwoord"
     
     def get_antwoord(self):
-        invoer = input(", ".join(self.weekdays) + " of druk op x om te stoppen: ").lower()
+        invoer = input("\nOp welke dag valt %s? " % self.datum.strftime("%d %b %Y"))
         if not invoer:
             return "get_antwoord"
 
@@ -51,8 +53,8 @@ class DatumQuiz(object):
                
         if invoer == self.correct_antwoord:
             self.correct_cnt += 1
-            print("Correct\n")
-            return "stel_vraag"
+            print("Correct")
+            return "kies_datum"
         else:
             self.vraag_cnt += 1
             print("Niet correct, probeer opnieuw ...")
@@ -74,19 +76,20 @@ class DatumQuiz(object):
 
     def hint (self):
         """toon een hint"""
-        print("De volgende datums vallen in een jaar altijd op dezelfde weekdag:")
-        print("    - 4 apr, 6 jun, 8 aug, 10 okt, 12 dec  (denk aan x van x-de maand)")
-        print("    - 9 mei, 5 sep                         (denk aan werktijden 9-to-5)")
-        print("    - 7 nov, 11 jul                        (denk aan de winkel 7/11)")
-        print("    - 0 mrt                                (de dag voor 1 mrt)")
-        print("    - 0 feb, 3 jan, echter:")
-        print("    - 1 feb, 4 jan voor schrikkeljaren")
-        print("Nummer de weekdagen als volgt: zo=0, ma=1, di=2, wo=3, do=4, vr=5, za=6 en reken modulo 7.")
-        print("    - het jaar 19jj heeft dag: 3 + jj + jj/4 (deling afronden naar beneden)")
-        print("    - het jaar 20jj heeft dag: 2 + jj + jj/4")
-        print("Bijvoorbeeld, op welke dag valt 5 mei 1945?")
-        print("    1945 heeft dag: 3 + 45 + 45/4 = 3 + 45 + 11 = 59 = 3 (mod 7) = wo")
-        print("    Dus 9 mei valt op 3 (met andere woorden, -6)")
-        print("    Dus 5 mei valt op 5-6=-1=6=za.")
+        print("""
+De volgende datums vallen in een jaar altijd op dezelfde weekdag:
+    - 4 apr, 6 jun, 8 aug, 10 okt, 12 dec  (denk aan x van x-de maand)
+    - 9 mei, 5 sep                         (denk aan werktijden 9-to-5)
+    - 7 nov, 11 jul                        (denk aan de winkel 7/11)
+    - 0 mrt                                (de dag voor 1 mrt)
+    - 0 feb, 3 jan, echter:
+    - 1 feb, 4 jan voor schrikkeljaren
+Nummer de weekdagen als volgt: zo=0, ma=1, di=2, wo=3, do=4, vr=5, za=6 en reken modulo 7.
+    - het jaar 19jj heeft dag: 3 + jj + jj/4 (deling afronden naar beneden)
+    - het jaar 20jj heeft dag: 2 + jj + jj/4
+Bijvoorbeeld, op welke dag valt 5 mei 1945?
+    1945 heeft dag: 3 + 45 + 45/4 = 3 + 45 + 11 = 59 = 3 (mod 7) = wo
+    Dus 9 mei valt op 3 (met andere woorden, -6)
+    Dus 5 mei valt op 5-6=-1=6=za.""")
         return "get_antwoord"
 

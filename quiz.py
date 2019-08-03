@@ -1,10 +1,7 @@
 #!/usr/bin/python3
 
-# willem sluis
-# 5 jan 2012
-
-# quiz waarbij vragen bestaan uit het raden van de weekdag 
-# van een random gegenereerde datum
+# quiz waarbij vragen bestaan uit het noemen van een datum
+# en de gebruiker de weekdag moet raden / berekenen.
 
 import datetime
 import argparse

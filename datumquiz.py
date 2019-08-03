@@ -68,7 +68,7 @@ class DatumQuiz(object):
         self.vraag_cnt -= 1
         if self.vraag_cnt > 0:
             print("aantal vragen : %d" % self.vraag_cnt)
-            print("correct       : %d" % self.correct_cnt        )
+            print("correct       : %d" % self.correct_cnt)
             tijdgebruikt = (datetime.datetime.now() 
                             - self.starttijd).seconds / self.vraag_cnt
             print("tijd per vraag: %.1f" % tijdgebruikt)
